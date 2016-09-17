@@ -3,11 +3,91 @@
 <head>
   <meta charset="UTF-8">
   <title>Frampton Tutorial</title>
+
+  <style>
+
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: Helvetica, Arial, sans-serif;
+      box-sizing: border-box;
+    }
+
+    html {
+      background: #efefef;
+    }
+
+    .content-wrap {
+      width: 80%;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .tracking-widget {
+      margin: 20px 0 0 0;
+    }
+
+    .form-wrapper {
+      position: relative;
+      padding: 0 100px 0 0;
+    }
+
+    .tracking-header {
+      font-size: 18px;
+      font-weight: 800;
+      margin: 0 0 5px 0;
+    }
+
+    .tracking-select {
+      -webkit-appearance: none;
+      appearance: none;
+      background: #fff;
+      border-radius: 1px;
+      height: 32px;
+      width: 100%;
+      line-height: 32px;
+      font-size: 16px;
+      display: block;
+      border: 1px solid rgba(0,0,0,0.25);
+      padding: 0 10px;
+    }
+
+    .submit-button {
+      position: absolute;
+      height: 32px;
+      width: 90px;
+      top: 0;
+      right: 0;
+      font-size: 16px;
+      background: #008CC9;
+      border: none;
+      outline: none;
+      color: #fff;
+    }
+
+  </style>
+
 </head>
 <body>
 
+  <div class="content-wrap">
+    <div class="tracking-widget">
+      <h2 class="tracking-header">Choose a thing</h2>
+      <div class="form-wrapper">
+        <form class="tracking-form" method="post" action="/api/submit">
+          <select class="tracking-select">
+            <option value="">Choose an option</option>
+            <option value="Option one">Option one</option>
+            <option value="Option two">Option two</option>
+          </select>
+          <button class="submit-button" type="submit">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <script src="/frampton/dist/frampton.js"></script>
-  <script src="/app_one.js"></script>
+  <script src="/app.js"></script>
 
 </body>
 </html>
