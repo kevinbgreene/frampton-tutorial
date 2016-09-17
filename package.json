@@ -1,0 +1,22 @@
+{
+  "name": "frampton-tutorial",
+  "version": "1.0.0",
+  "description": "Tutorial for frampton.js",
+  "main": "index.js",
+  "scripts": {
+    "serve": "nodemon ./server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:kevinbgreene/frampton-tutorial.git"
+  },
+  "author": "Kevin Greene",
+  "license": "BSD",
+  "dependencies": {
+    "frampton": "^0.2.3"
+  },
+  "devDependencies": {
+    "express": "^4.14.0",
+    "nodemon": "^1.10.2"
+  }
+}

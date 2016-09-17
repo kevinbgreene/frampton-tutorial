@@ -1,0 +1,16 @@
+{
+  "framework": "qunit",
+
+  "timeout": 540,
+
+  "disable_watching": true,
+
+  "launch_in_dev": [
+    "PhantomJS"
+  ],
+
+  "src_files": [
+    "src/**/*.js",
+    "tests/**/*.js"
+  ]
+}
