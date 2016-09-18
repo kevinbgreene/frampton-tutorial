@@ -1,8 +1,16 @@
 const Signal = Frampton.Signal;
 const Union = Frampton.Data.Union;
+const Record = Frampton.Data.Record;
 const onSelector = Frampton.Events.onSelector;
 const eventValue = Frampton.Events.eventValue;
 const preventDefault = Frampton.Events.preventDefault;
+
+const State = Record.create({
+  selection : ''
+});
+
+const newState = (selection) =>
+  State.set('selection', selection);
 
 const Actions = Union.create({
   UpdateSelection : [ 'selection' ],
@@ -19,15 +27,11 @@ const selectionSubmit =
     .map(preventDefault)
     .map(Actions.SubmitSelection);
 
-const newState = (selection) => ({
-  currentSelection : selection
-});
-
 const update = (state, msg) =>
   Actions.match({
 
     UpdateSelection : (selection) => {
-      return newState(selection);
+      return state.set('selection', selection);
     },
 
     SubmitSelection : () => {
