@@ -13,7 +13,8 @@
   "author": "Kevin Greene",
   "license": "BSD",
   "dependencies": {
-    "frampton": "^0.2.3"
+    "frampton": "^0.2.3",
+    "frampton-io": "^0.1.2"
   },
   "devDependencies": {
     "express": "^4.14.0",

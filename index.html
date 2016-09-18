@@ -54,6 +54,7 @@
 
     .submit-button {
       position: absolute;
+      opacity: 0.8;
       height: 32px;
       width: 90px;
       top: 0;
@@ -63,6 +64,14 @@
       border: none;
       outline: none;
       color: #fff;
+    }
+
+    .submit-button:hover {
+      opacity: 1.0;
+    }
+
+    .submit-button:disabled {
+      opacity: 0.5;
     }
 
   </style>
@@ -80,13 +89,14 @@
             <option value="Option one">Option one</option>
             <option value="Option two">Option two</option>
           </select>
-          <button class="submit-button" type="submit">Submit</button>
+          <button class="submit-button" type="submit" disabled>Submit</button>
         </form>
       </div>
     </div>
   </div>
 
   <script src="/frampton/dist/frampton.js"></script>
+  <script src="/frampton-io/dist/frampton-io.js"></script>
   <script src="/app.js"></script>
 
 </body>

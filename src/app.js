@@ -1,21 +1,38 @@
 const Signal = Frampton.Signal;
 const Union = Frampton.Data.Union;
 const Record = Frampton.Data.Record;
+const Task = Frampton.Data.Task;
+const List = Frampton.List;
+const Http = Frampton.IO.Http;
 const onSelector = Frampton.Events.onSelector;
 const eventValue = Frampton.Events.eventValue;
 const preventDefault = Frampton.Events.preventDefault;
+
+
+// STATE
 
 const State = Record.create({
   selection : ''
 });
 
-const newState = (selection) =>
-  State.set('selection', selection);
+const init = (selection) => {
+  const initialState = State.set('selection', selection);
+  const initialTask = Task.never();
+  return [initialState, initialTask];
+};
+
+
+// ACTIONS
 
 const Actions = Union.create({
   UpdateSelection : [ 'selection' ],
-  SubmitSelection : []
+  SubmitSelection : [],
+  DisplaySuccess : [],
+  DisplayError : []
 });
+
+
+// INPUTS
 
 const selectionChange =
   onSelector('change', '.tracking-select')
@@ -27,15 +44,71 @@ const selectionSubmit =
     .map(preventDefault)
     .map(Actions.SubmitSelection);
 
+
+// TASKS
+
+const validateSelection = (selection) => {
+  return Task.create((sinks) => {
+    const submitButton = document.querySelector('.submit-button');
+    if (selection && selection.trim().length > 0) {
+      submitButton.removeAttribute('disabled');
+    } else {
+      submitButton.setAttribute('disabled', true);
+    }
+  });
+};
+
+const submitData = (selection) => {
+
+  const task = Http.postJson('/api/submit', {
+    selection : selection
+  });
+
+  const taskToAction =
+    task
+      .recover(Actions.DisplayError)
+      .map(Actions.DisplaySuccess)
+
+  return taskToAction;
+};
+
+const displayError = () => {
+  return Task.create((sinks) => {
+    window.alert('An error occurred while submitting selection');
+  });
+};
+
+const displaySuccess = () => {
+  return Task.create((sinks) => {
+    window.alert('Selection successfully submitted');
+  });
+};
+
+
+// UPDATE
+
 const update = (state, msg) =>
   Actions.match({
 
     UpdateSelection : (selection) => {
-      return state.set('selection', selection);
+      const newState = state.set('selection', selection);
+      const newTask = validateSelection(selection);
+      return [newState, newTask];
     },
 
     SubmitSelection : () => {
-      return state;
+      const newTask = submitData(state.selection);
+      return [state, newTask];
+    },
+
+    DisplaySuccess : () => {
+      const newTask = displaySuccess();
+      return [state, newTask];
+    },
+
+    DisplayError : () => {
+      const newTask = displayError();
+      return [state, newTask];
     }
 
   }, msg);
@@ -43,12 +116,17 @@ const update = (state, msg) =>
 
 // BUILD APPLICATION
 
-const initialState = newState('');
-const inputs = Signal.merge([selectionChange, selectionSubmit]);
-const app = inputs.fold((acc, nextAction) => {
-  return update(acc, nextAction);
-}, initialState);
+const initStateAndTasks = init('');
+const taskResults = Signal.create();
+const inputs = Signal.merge([selectionChange, selectionSubmit, taskResults]);
+const stateAndTasks = inputs.fold((acc, nextAction) => {
+  const currentState = acc[0];
+  return update(currentState, nextAction);
+}, initStateAndTasks);
+const tasks = stateAndTasks.map(List.second);
 
-app.value((currentState) => {
-  console.log('current state: ', currentState);
+Task.execute(tasks, taskResults.push);
+
+stateAndTasks.value((current) => {
+  console.log('current state and tasks: ', current);
 });
