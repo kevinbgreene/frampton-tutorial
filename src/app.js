@@ -1,43 +1,40 @@
 const Signal = Frampton.Signal;
+const Union = Frampton.Data.Union;
 const onSelector = Frampton.Events.onSelector;
 const eventValue = Frampton.Events.eventValue;
 const preventDefault = Frampton.Events.preventDefault;
 
-const updateSelection = (selection) => ({
-  name : 'UpdateSelection',
-  data : selection
-});
-
-const submitSelection = () => ({
-  name : 'SubmitSelection'
+const Actions = Union.create({
+  UpdateSelection : [ 'selection' ],
+  SubmitSelection : []
 });
 
 const selectionChange =
   onSelector('change', '.tracking-select')
     .map(eventValue)
-    .map(updateSelection);
+    .map(Actions.UpdateSelection);
 
 const selectionSubmit =
   onSelector('submit', '.tracking-form')
     .map(preventDefault)
-    .map(submitSelection);
+    .map(Actions.SubmitSelection);
 
 const newState = (selection) => ({
   currentSelection : selection
 });
 
-const update = (state, msg) => {
-  switch (msg.name) {
-    case 'UpdateSelection':
-      return newState(msg.data);
+const update = (state, msg) =>
+  Actions.match({
 
-    case 'SubmitSelection':
+    UpdateSelection : (selection) => {
+      return newState(selection);
+    },
+
+    SubmitSelection : () => {
       return state;
+    }
 
-    default:
-      throw new Error('update received an unrecognized message');
-  }
-}
+  }, msg);
 
 
 // BUILD APPLICATION
