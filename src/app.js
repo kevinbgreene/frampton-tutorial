@@ -3,6 +3,7 @@ const Union = Frampton.Data.Union;
 const Record = Frampton.Data.Record;
 const Task = Frampton.Data.Task;
 const List = Frampton.List;
+const App = Frampton.App;
 const Http = Frampton.IO.Http;
 const onSelector = Frampton.Events.onSelector;
 const eventValue = Frampton.Events.eventValue;
@@ -87,7 +88,7 @@ const displaySuccess = () => {
 
 // UPDATE
 
-const update = (state, msg) =>
+const update = (msg, state) =>
   Actions.match({
 
     UpdateSelection : (selection) => {
@@ -114,19 +115,10 @@ const update = (state, msg) =>
   }, msg);
 
 
-// BUILD APPLICATION
+// INIT APPLICATION
 
-const initStateAndTasks = init('');
-const taskResults = Signal.create();
-const inputs = Signal.merge([selectionChange, selectionSubmit, taskResults]);
-const stateAndTasks = inputs.fold((acc, nextAction) => {
-  const currentState = acc[0];
-  return update(currentState, nextAction);
-}, initStateAndTasks);
-const tasks = stateAndTasks.map(List.second);
-
-Task.execute(tasks, taskResults.push);
-
-stateAndTasks.value((current) => {
-  console.log('current state and tasks: ', current);
+const app = App.basic({
+  init : init,
+  update : update,
+  inputs : [ selectionChange, selectionSubmit ]
 });
