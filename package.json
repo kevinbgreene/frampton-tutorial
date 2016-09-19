@@ -4,7 +4,8 @@
   "description": "Tutorial for frampton.js",
   "main": "index.js",
   "scripts": {
-    "serve": "nodemon ./server.js"
+    "serve": "nodemon ./server.js",
+    "test": "testem"
   },
   "repository": {
     "type": "git",
@@ -19,6 +20,7 @@
   },
   "devDependencies": {
     "express": "^4.14.0",
-    "nodemon": "^1.10.2"
+    "nodemon": "^1.10.2",
+    "testem": "^1.12.0"
   }
 }

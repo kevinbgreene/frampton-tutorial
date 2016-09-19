@@ -6,10 +6,13 @@
   "disable_watching": true,
 
   "launch_in_dev": [
-    "PhantomJS"
+    "Chrome"
   ],
 
   "src_files": [
+    "node_modules/frampton/dist/frampton.js",
+    "node_modules/frampton-app/dist/frampton-app.js",
+    "node_modules/frampton-io/dist/frampton-io.js",
     "src/**/*.js",
     "tests/**/*.js"
   ]
